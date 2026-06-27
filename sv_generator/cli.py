@@ -13,6 +13,7 @@ from pathlib import Path
 import sys
 
 from .core import generate_artifacts
+from .mcp_server import run_mcp_server
 from .server import run_server
 
 
@@ -32,6 +33,10 @@ def main(argv: list[str] | None = None) -> int:
     serve_parser.add_argument('--mappings', required=True, help='Path to generated WireMock mapping JSON files.')
     serve_parser.add_argument('--host', default='0.0.0.0', help='Host for the local mock server.')
     serve_parser.add_argument('--port', type=int, default=8089, help='Port for the local mock server.')
+
+    mcp_parser = subparsers.add_parser('mcp', help='Run an MCP-ready HTTP server for AI or automation integration.')
+    mcp_parser.add_argument('--host', default='0.0.0.0', help='Host for the MCP server.')
+    mcp_parser.add_argument('--port', type=int, default=9000, help='Port for the MCP server.')
 
     args = parser.parse_args(argv)
     if args.command == 'generate':
@@ -54,6 +59,14 @@ def main(argv: list[str] | None = None) -> int:
                 host=args.host,
                 port=args.port,
             )
+            return 0
+        except Exception as exc:
+            print(f'ERROR: {exc}', file=sys.stderr)
+            return 1
+
+    if args.command == 'mcp':
+        try:
+            run_mcp_server(host=args.host, port=args.port)
             return 0
         except Exception as exc:
             print(f'ERROR: {exc}', file=sys.stderr)
