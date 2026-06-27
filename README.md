@@ -102,6 +102,31 @@ or:
 ./scripts/run-local-mock.sh generated/wiremock/mappings
 ```
 
+### 3c. Start the MCP-ready integration server
+
+```bash
+python -m sv_generator.cli mcp --host 127.0.0.1 --port 9000
+```
+
+Then send a POST request to generate artifacts:
+
+```bash
+curl -X POST http://127.0.0.1:9000/generate \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "openapi_path": "input/openapi/eligibility-api-v1.yaml",
+    "scenario_path": "input/scenarios/eligibility-scenarios.yaml",
+    "rules_path": "input/test-data-rules/eligibility-data-rules.yaml",
+    "output_root": "generated"
+  }'
+```
+
+Use `GET /health` to verify the server is running:
+
+```bash
+curl http://127.0.0.1:9000/health
+```
+
 ### 4. Call the mock endpoints
 
 ```bash
@@ -110,6 +135,48 @@ curl http://localhost:8089/api/v1/eligibility/M1002
 curl http://localhost:8089/api/v1/eligibility/M9999
 curl http://localhost:8089/api/v1/eligibility/M5000
 curl http://localhost:8089/api/v1/eligibility/INVALID
+```
+
+### 4b. Demo this on a MacBook
+
+Open three terminal windows:
+
+1. Generate the assets:
+
+```bash
+make generate
+```
+
+2. Start the local mock server:
+
+```bash
+make serve
+```
+
+3. Run a quick smoke check manually:
+
+```bash
+curl http://localhost:8089/api/v1/eligibility/M1001
+curl http://localhost:8089/api/v1/eligibility/M1002
+```
+
+If you want to demo the MCP interface instead, start the integration server:
+
+```bash
+python3 -m sv_generator.cli mcp --host 127.0.0.1 --port 9000
+```
+
+Then trigger generation from another terminal:
+
+```bash
+curl -X POST http://127.0.0.1:9000/generate \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "openapi_path": "input/openapi/eligibility-api-v1.yaml",
+    "scenario_path": "input/scenarios/eligibility-scenarios.yaml",
+    "rules_path": "input/test-data-rules/eligibility-data-rules.yaml",
+    "output_root": "generated"
+  }'
 ```
 
 ### 5. Run tests
@@ -153,6 +220,7 @@ Key features:
 - Local Python mock runtime (no Docker required)
 - Comprehensive smoke and unit tests
 - YAML-based configuration for easy customization
+- MCP-ready HTTP integration server for automation and AI workflows
 
 ## Architecture and design philosophy
 

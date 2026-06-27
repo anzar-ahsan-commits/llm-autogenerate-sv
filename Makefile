@@ -15,6 +15,9 @@ generate:
 serve:
 	./scripts/run-local-mock.sh generated/wiremock/mappings
 
+mcp:
+	$(PYTHON) -m sv_generator.cli mcp --host 127.0.0.1 --port 9000
+
 start:
 	docker-compose up -d
 

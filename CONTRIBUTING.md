@@ -46,10 +46,16 @@ python3 -m pip install -r requirements.txt
 make generate
 ```
 
-## Starting WireMock
+## Starting the local mock server
 
 ```bash
-./scripts/start-wiremock.sh
+./scripts/run-local-mock.sh generated/wiremock/mappings
+```
+
+## Starting the MCP integration server
+
+```bash
+./scripts/run-mcp.sh
 ```
 
 ## Running smoke tests
