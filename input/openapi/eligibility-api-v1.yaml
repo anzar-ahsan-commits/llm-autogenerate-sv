@@ -1,0 +1,69 @@
+openapi: 3.0.3
+info:
+  title: Eligibility API
+  version: 1.0.0
+  description: Synthetic eligibility verification API for Service Virtualization demo.
+servers:
+  - url: http://localhost:8089
+paths:
+  /api/v1/eligibility/{memberId}:
+    get:
+      summary: Check member eligibility
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^M[0-9]{4}$'
+      responses:
+        '200':
+          description: Eligibility lookup succeeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityResponse'
+        '400':
+          description: Bad request due to malformed or missing memberId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Member not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Downstream service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    EligibilityResponse:
+      type: object
+      required:
+        - memberId
+        - coverageStatus
+        - message
+      properties:
+        memberId:
+          type: string
+        coverageStatus:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+        message:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+        - errorCode
+        - message
+      properties:
+        errorCode:
+          type: string
+        message:
+          type: string

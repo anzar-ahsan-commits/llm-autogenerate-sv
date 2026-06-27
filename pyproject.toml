@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-autogenerate-sv"
+version = "0.1.0"
+description = "Service Virtualization generator for a synthetic healthcare Eligibility API."
+author = "Anzar Ahsan"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "PyYAML>=6.0",
+  "requests>=2.31",
+  "pytest>=8.2",
+]
+classifiers = [
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Source" = "https://github.com/your-org/llm-autogenerate-sv"
+"Documentation" = "README.md"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sv_generator*"]

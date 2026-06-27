@@ -1,0 +1,49 @@
+scenarios:
+  - id: active-member
+    name: Active member
+    description: Valid member with active coverage.
+    method: GET
+    path: /api/v1/eligibility/M1001
+    expectedStatus: 200
+    response:
+      memberId: M1001
+      coverageStatus: ACTIVE
+      message: Member has active coverage.
+  - id: inactive-member
+    name: Inactive member
+    description: Valid member with inactive coverage.
+    method: GET
+    path: /api/v1/eligibility/M1002
+    expectedStatus: 200
+    response:
+      memberId: M1002
+      coverageStatus: INACTIVE
+      message: Member coverage is inactive.
+  - id: invalid-member
+    name: Invalid member
+    description: Member that does not exist in the eligibility store.
+    method: GET
+    path: /api/v1/eligibility/M9999
+    expectedStatus: 404
+    response:
+      errorCode: MEMBER_NOT_FOUND
+      message: Member not found.
+  - id: downstream-unavailable
+    name: Downstream unavailable
+    description: Simulate an external dependency outage.
+    method: GET
+    path: /api/v1/eligibility/M5000
+    expectedStatus: 503
+    fixedDelayMilliseconds: 1500
+    response:
+      errorCode: DOWNSTREAM_UNAVAILABLE
+      message: Downstream eligibility service is unavailable.
+  - id: bad-request
+    name: Bad request
+    description: Malformed memberId triggers a validation error.
+    method: GET
+    path: /api/v1/eligibility/INVALID
+    expectedStatus: 400
+    response:
+      errorCode: BAD_REQUEST
+      message: Request failed due to malformed memberId.

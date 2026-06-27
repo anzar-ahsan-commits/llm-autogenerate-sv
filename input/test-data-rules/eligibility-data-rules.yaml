@@ -1,0 +1,19 @@
+memberId:
+  pattern: '^M[0-9]{4}$'
+coverageStatus:
+  allowed:
+    - ACTIVE
+    - INACTIVE
+messages:
+  ACTIVE: Member has active coverage.
+  INACTIVE: Member coverage is inactive.
+  MEMBER_NOT_FOUND: Member not found.
+  DOWNSTREAM_UNAVAILABLE: Downstream eligibility service is unavailable.
+  BAD_REQUEST: Request failed due to malformed memberId.
+errorCodes:
+  MEMBER_NOT_FOUND:
+    status: 404
+  DOWNSTREAM_UNAVAILABLE:
+    status: 503
+  BAD_REQUEST:
+    status: 400

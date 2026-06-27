@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  wiremock:
+    image: wiremock/wiremock:2.35.0
+    ports:
+      - "8089:8080"
+    volumes:
+      - ./generated/wiremock:/home/wiremock
+    command: ["--verbose", "--root-dir", "/home/wiremock"]

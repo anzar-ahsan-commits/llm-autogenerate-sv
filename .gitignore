@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+generated/
+.venv/
+.env
+.DS_Store
+.vscode/
+.idea/
+.pytest_cache/
+docker-compose.override.yml
